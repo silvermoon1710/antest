@@ -86,8 +86,22 @@ http {
     #  if (-d $request_filename) {
     #    break;
     #  }
+	
+	# lqa add : using for PHP-FastCGI
+    location ~ \.php$ {
+        try_files $uri =404;
+        include       /etc/nginx/fastcgi_params;
+        fastcgi_pass  127.0.0.1:9000;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
 
-    rewrite         ^(.+)$ /index.php?q=$1 last;
+    location @extensionless-php {
+        rewrite ^(.*)$ $1.php last;
+    }
+	# lqa end add
+	
+
+    # rewrite         ^(.+)$ /index.php?q=$1 last;
 
     #  # Add trailing slash to */wp-admin requests.
     #  rewrite         /wp-admin$ $scheme://$host$uri/ permanent;
