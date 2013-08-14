@@ -88,16 +88,11 @@ http {
     #  }
 	
 	# lqa add : using for PHP-FastCGI
-    location ~ \.php$ {
-        try_files $uri =404;
-        include       /etc/nginx/fastcgi_params;
-        fastcgi_pass  127.0.0.1:9000;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    }
-
-    location @extensionless-php {
-        rewrite ^(.*)$ $1.php last;
-    }
+	location / { 
+		if (!-e $request_filename){ 
+			rewrite ^(.*)$ /$1.php; 
+		} 
+	}
 	# lqa end add
 	
 
